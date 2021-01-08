@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 
+// COMENTARIO EN MAIN ACTIVITY PARA PROBAR PUSH
 public class MainActivity extends AppCompatActivity {
     static final int TWOPLAYERS = 2;
     static final int THREEPLAYERS = 3;
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
     }
 
     public void onClick(View v){
