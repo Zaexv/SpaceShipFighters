@@ -69,6 +69,7 @@ public class SpaceShipGame extends AppCompatActivity {
         spaceship3 = (ImageView) findViewById(R.id.imageP3);
         spaceship4 = (ImageView) findViewById(R.id.imageP4);
 
+
         switch(numPlayers){
             case 2:
                 spaceship2.setEnabled(false);
