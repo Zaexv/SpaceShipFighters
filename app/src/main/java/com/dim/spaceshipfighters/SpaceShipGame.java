@@ -77,7 +77,7 @@ public class SpaceShipGame extends AppCompatActivity {
                                         + "SHIP2: " + ship2.getX()  + ship2.getY()  + "\n"
                                         + "SHIP3: " + ship3.getX()  + ship3.getY()  + "\n"
                                         + "SHIP4: " + ship4.getX()  + ship4.getY()  + "\n"
-                                        + "Event: " + (xp - xDelta )+ " "+ " " + (yp - yDelta) + "\n"
+                                        + "Event: " + (xp) + " " + " " + (yp) + "\n"
                                         + "Event0: " + (x - xDelta )+ " "+ " " + (y - yDelta) + "\n"
                                         + "Delta: " + xDelta+ " "+ " " + yDelta + "\n"
                                         + "SELECTED: " + ship.getName() + "\n"
