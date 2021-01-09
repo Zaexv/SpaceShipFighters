@@ -59,30 +59,24 @@ public class SpaceShip {
     }
 
     public double setShootLine(double x, double x1, double y1, double x2, double y2){
-       double div = (y2 - y1)/(x2 - x1);
-
-       System.out.println(y1 + " + " + div + "*" + (x-x1)) ;
         return y1 + ((y2 - y1)/(x2 - x1))*(x - x1);
     }
 
+    public double setShootLine2(double x, double x1, double y1, double x2, double y2){
+        //Same as setShootLine with -m
+        return y1 + (-(y2 - y1)/(x2 - x1))*(x - x1);
+    }
+
     public void shoot(float x2, float y2) {
-
-                if(getX() > x2){
-
-                    bulletView.setX(imageView.getX() + 250);
-                    System.out.println("YValueSet" + (float)setShootLine(
-                            50,x2, y2 ,getX(),getY()));
-                    bulletView.setY((float)setShootLine(
-                            50, getX(), getY() ,x2,y2));
-                } else if(getX() < x2){
-
+                if(getX() >= x2){ //X is at Left from Ship
+                        bulletView.setX(imageView.getX() + 250);
+                        bulletView.setY((float)setShootLine2(
+                                50,getX(),getY(),x2,y2));
+                } else if(getX() < x2){ //X is at Right from Ship
                     bulletView.setX(imageView.getX() - imageView.getWidth() - 250);
-                    System.out.println("YValueSet" + (float)setShootLine(
-                            -50,x2, y2 ,getX(),getY()));
                     bulletView.setY((float)setShootLine(
                             -50, getX(), getY() ,x2,y2));
                 }
         }
-
 }
 
