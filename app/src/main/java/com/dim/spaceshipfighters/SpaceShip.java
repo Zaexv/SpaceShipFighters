@@ -58,13 +58,31 @@ public class SpaceShip {
         return this.imageView.getY();
     }
 
-    public int setShootLine(int x, int x1, int y1, int x2, int y2){
-       return y1 + ((y2 - y1)/(x2 - x1))*(x - x1);
+    public double setShootLine(double x, double x1, double y1, double x2, double y2){
+       double div = (y2 - y1)/(x2 - x1);
+
+       System.out.println(y1 + " + " + div + "*" + (x-x1)) ;
+        return y1 + ((y2 - y1)/(x2 - x1))*(x - x1);
     }
 
-    public void shoot(){
+    public void shoot(float x2, float y2) {
 
-        bulletView.setX(imageView.getX() + 50);
-        bulletView.setY(imageView.getY() + 50);
-    }
+                if(getX() > x2){
+
+                    bulletView.setX(imageView.getX() + 250);
+                    System.out.println("YValueSet" + (float)setShootLine(
+                            50,x2, y2 ,getX(),getY()));
+                    bulletView.setY((float)setShootLine(
+                            50, getX(), getY() ,x2,y2));
+                } else {
+
+                    bulletView.setX(imageView.getX() - 250);
+                    System.out.println("YValueSet" + (float)setShootLine(
+                            -50,x2, y2 ,getX(),getY()));
+                    bulletView.setY((float)setShootLine(
+                            -50, getX(), getY() ,x2,y2));
+                }
+        }
+
 }
+

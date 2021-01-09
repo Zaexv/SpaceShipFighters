@@ -67,10 +67,12 @@ public class SpaceShipGame extends AppCompatActivity {
                     case MotionEvent.ACTION_POINTER_DOWN:
                         //This piece of code take the relative position in the layout
                         int location[] = {0,0};
-                        ship1.shoot();
+
                         view.getLocationOnScreen(location);
                         int xp = (int) event.getX(index) + location[0];
                         int yp = (int) event.getY(index) + location[1];
+
+                        ship1.shoot((float)xp,(float)yp);
 
                         xDelta = x - lParams.leftMargin;
                         yDelta = y - lParams.topMargin;
