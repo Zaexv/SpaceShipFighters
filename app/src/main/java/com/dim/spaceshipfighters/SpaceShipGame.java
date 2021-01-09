@@ -45,36 +45,41 @@ public class SpaceShipGame extends AppCompatActivity {
                         view.getLayoutParams();
                 SpaceShip ship = getShipFromView(view);
 
-
-               debug.setText(
-                        "SHIP1: " + ship1.getPointer() + ship1.getX()  + ship1.getY() + "\n"
-                        + "SHIP2: " + ship2.getPointer()+ ship2.getX()  + ship2.getY()  + "\n"
-                        + "SHIP3: " + ship3.getPointer()+ ship3.getX()  + ship3.getY()  + "\n"
-                        + "SHIP4: " + ship4.getPointer()+ ship4.getX()  + ship4.getY()  + "\n"
-                        + "Event: " + (x - xDelta )+ " "+ " " +(y - yDelta) + "\n"
+               //This is to debug every action.
+              /*  debug.setText(
+                        "SHIP1: "+ ship1.getX()  + ship1.getY() + "\n"
+                                + "SHIP2: "+ ship2.getX()  + ship2.getY()  + "\n"
+                                + "SHIP3: "+ ship3.getX()  + ship3.getY()  + "\n"
+                                + "SHIP4: "+ ship4.getX()  + ship4.getY()  + "\n"
+                             //   + "Event: " + (xp - xDelta)+ " "+ " " + (yp - yDelta) + "\n"
+                                + "Event0: " + (x - xDelta)+ " "+ " " + (y - yDelta) + "\n"
+                                + "Delta: " + xDelta+ " "+ " " + yDelta + "\n"
                                 + "SELECTED: " + ship.getName() + "\n"
-                                );
-
+                             //   +" ClOSEST: " + closest.getName() + "\n"
+                                +" POINTER: " + pointer + "\n"
+                );
+                */
                 switch (event.getActionMasked() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
                         xDelta = x - lParams.leftMargin;
                         yDelta = y - lParams.topMargin;
                         break;
                     case MotionEvent.ACTION_POINTER_DOWN:
-                        //TODO getCloserView() a el X e Y.
-                        //TODO Disparar
-                        int xp = (int) event.getX(pointer);
-                        int yp = (int) event.getY(pointer);
-                        int xDeltap = xp - lParams.leftMargin;
-                        int yDeltap = yp - lParams.topMargin;
-                        SpaceShip closest = getClosestShip(xp - xDeltap,yp - yDeltap);
+                        //This piece of code take the relative position in the layout
+                        int location[] = {0,0};
+                        view.getLocationOnScreen(location);
+                        int xp = (int) event.getX(pointer) + location[0];
+                        int yp = (int) event.getY(pointer) + location[1];
+
+                        SpaceShip closest = getClosestShip(xp - xDelta,yp - yDelta);
                         debug.setText(
-                                "SHIP1: " + ship1.getPointer() + ship1.getX()  + ship1.getY() + "\n"
-                                        + "SHIP2: " + ship2.getPointer()+ ship2.getX()  + ship2.getY()  + "\n"
-                                        + "SHIP3: " + ship3.getPointer()+ ship3.getX()  + ship3.getY()  + "\n"
-                                        + "SHIP4: " + ship4.getPointer()+ ship4.getX()  + ship4.getY()  + "\n"
-                                        + "Event: " + (xp - xDelta)+ " "+ " " + (yp - yDelta) + "\n"
-                                        + "Event0: " + (x - xDelta)+ " "+ " " + (y - yDelta) + "\n"
+                                        "SHIP1: " + ship1.getX()  + ship1.getY() + "\n"
+                                        + "SHIP2: " + ship2.getX()  + ship2.getY()  + "\n"
+                                        + "SHIP3: " + ship3.getX()  + ship3.getY()  + "\n"
+                                        + "SHIP4: " + ship4.getX()  + ship4.getY()  + "\n"
+                                        + "Event: " + (xp - xDelta )+ " "+ " " + (yp - yDelta) + "\n"
+                                        + "Event0: " + (x - xDelta )+ " "+ " " + (y - yDelta) + "\n"
+                                        + "Delta: " + xDelta+ " "+ " " + yDelta + "\n"
                                         + "SELECTED: " + ship.getName() + "\n"
                                         +" ClOSEST: " + closest.getName() + "\n"
                                         +" POINTER: " + pointer + "\n"
@@ -82,7 +87,7 @@ public class SpaceShipGame extends AppCompatActivity {
                         break;
 
                     case MotionEvent.ACTION_POINTER_UP:
-                        debug.setText("POINTER UP: " + ship.getName());
+                       // debug.setText("POINTER UP: " + ship.getName());
                         break;
 
                     case MotionEvent.ACTION_MOVE:
