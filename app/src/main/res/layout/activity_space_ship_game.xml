@@ -7,66 +7,90 @@
     tools:context=".SpaceShipGame">
 
     <RelativeLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/main"
+        android:background="@drawable/space_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/imageP4"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.951"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ship4" />
+        <ImageView
+            android:id="@+id/bulletP1"
+            android:layout_width="179dp"
+            android:layout_height="198dp"
+            android:layout_marginStart="150dp"
+            android:layout_marginTop="400dp"
+            android:layout_marginEnd="232dp"
+            android:layout_marginRight="232dp"
+            android:layout_marginBottom="267dp"
+            app:layout_constraintBottom_toTopOf="@+id/imageP2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/abc_vector_test" />
 
-    <ImageView
-        android:id="@+id/imageP1"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="278dp"
-        android:layout_marginTop="465dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.698"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.543"
-        app:srcCompat="@drawable/ship1" />
+        <ImageView
+            android:id="@+id/imageP4"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="290dp"
+            android:rotation="180"
+            app:srcCompat="@drawable/ship4" />
 
-    <ImageView
-        android:id="@+id/imageP2"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="465dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.048"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.543"
-        app:srcCompat="@drawable/ship2" />
+        <ImageView
+            android:id="@+id/imageP1"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="278dp"
+            android:layout_marginTop="600dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.698"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.543"
+            app:srcCompat="@drawable/ship1" />
 
-    <ImageView
-        android:id="@+id/imageP3"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.081"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ship3" />
+        <ImageView
+            android:id="@+id/imageP2"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="600dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.048"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.543"
+            app:srcCompat="@drawable/ship2" />
+
+        <ImageView
+            android:id="@+id/imageP3"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="20dp"
+            android:rotation="180"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.081"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/ship3" />
 
         <TextView
             android:id="@+id/debug"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="150dp"
+            android:background="#FFFFFF"
             android:text="debug text" />
 
     </RelativeLayout>

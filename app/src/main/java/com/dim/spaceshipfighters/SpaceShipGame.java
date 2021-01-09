@@ -19,7 +19,7 @@ import java.util.List;
 public class SpaceShipGame extends AppCompatActivity {
 
     private int numPlayers; //Stores num of players in-game
-    ImageView spaceship1, spaceship2, spaceship3, spaceship4;
+    ImageView spaceship1, spaceship2, spaceship3, spaceship4, bullet1,bullet2,bullet3,bullet4;
     SpaceShip ship1, ship2, ship3,ship4;
     private ViewGroup mainLayout;
     TextView debug,debug2;
@@ -67,6 +67,7 @@ public class SpaceShipGame extends AppCompatActivity {
                     case MotionEvent.ACTION_POINTER_DOWN:
                         //This piece of code take the relative position in the layout
                         int location[] = {0,0};
+                        ship1.shoot();
                         view.getLocationOnScreen(location);
                         int xp = (int) event.getX(index) + location[0];
                         int yp = (int) event.getY(index) + location[1];
@@ -75,6 +76,10 @@ public class SpaceShipGame extends AppCompatActivity {
                         yDelta = y - lParams.topMargin;
 
                         SpaceShip closest = getClosestShip(xp - xDelta,yp -yDelta);
+
+                        //TODO Crear vector de disparo y pintarlo
+
+
                         debug.setText(
                                         "SHIP1: " + ship1.getX()  + ship1.getY() + "\n"
                                         + "SHIP2: " + ship2.getX()  + ship2.getY()  + "\n"
@@ -120,8 +125,10 @@ public class SpaceShipGame extends AppCompatActivity {
         spaceship3 = (ImageView) findViewById(R.id.imageP3);
         spaceship4 = (ImageView) findViewById(R.id.imageP4);
 
+        bullet1 = (ImageView)findViewById(R.id.bulletP1);
+
         //Defining SpaceShip Object
-        ship1 = new SpaceShip(spaceship1);
+        ship1 = new SpaceShip(spaceship1, bullet1);
         ship1.setName("F21");
         ship2 = new SpaceShip(spaceship2);
         ship2.setName("Z8");
@@ -167,7 +174,7 @@ public class SpaceShipGame extends AppCompatActivity {
         return result;
     }
 
-    public double getDistanceBetweenPoints( double x1, double y1, double x2, double y2) {
+    public double getDistanceBetweenPoints(double x1, double y1, double x2, double y2) {
         return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
 
