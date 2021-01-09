@@ -72,11 +72,12 @@ public class SpaceShipGame extends AppCompatActivity {
                         int xp = (int) event.getX(index) + location[0];
                         int yp = (int) event.getY(index) + location[1];
 
-                        ship1.shoot((float)xp,(float)yp);
+
 
                         xDelta = x - lParams.leftMargin;
                         yDelta = y - lParams.topMargin;
 
+                        ship1.shoot((float)xp-xDelta,(float)yp-yDelta);
                         SpaceShip closest = getClosestShip(xp - xDelta,yp -yDelta);
 
                         //TODO Crear vector de disparo y pintarlo

@@ -74,9 +74,9 @@ public class SpaceShip {
                             50,x2, y2 ,getX(),getY()));
                     bulletView.setY((float)setShootLine(
                             50, getX(), getY() ,x2,y2));
-                } else {
+                } else if(getX() < x2){
 
-                    bulletView.setX(imageView.getX() - 250);
+                    bulletView.setX(imageView.getX() - imageView.getWidth() - 250);
                     System.out.println("YValueSet" + (float)setShootLine(
                             -50,x2, y2 ,getX(),getY()));
                     bulletView.setY((float)setShootLine(
