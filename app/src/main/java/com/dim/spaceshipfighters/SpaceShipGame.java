@@ -36,8 +36,8 @@ public class SpaceShipGame extends AppCompatActivity {
             @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-                 final int x = (int) event.getRawX();
-                 final int y = (int) event.getRawY();
+                final int x = (int) event.getRawX();
+                final int y = (int) event.getRawY();
                 int index = event.getActionIndex();
                 int pointer = event.getPointerId(index);
 
@@ -68,16 +68,19 @@ public class SpaceShipGame extends AppCompatActivity {
                         //This piece of code take the relative position in the layout
                         int location[] = {0,0};
                         view.getLocationOnScreen(location);
-                        int xp = (int) event.getX(pointer) + location[0];
-                        int yp = (int) event.getY(pointer) + location[1];
+                        int xp = (int) event.getX(index) + location[0];
+                        int yp = (int) event.getY(index) + location[1];
 
-                        SpaceShip closest = getClosestShip(xp - xDelta,yp - yDelta);
+                        xDelta = x - lParams.leftMargin;
+                        yDelta = y - lParams.topMargin;
+
+                        SpaceShip closest = getClosestShip(xp - xDelta,yp -yDelta);
                         debug.setText(
                                         "SHIP1: " + ship1.getX()  + ship1.getY() + "\n"
                                         + "SHIP2: " + ship2.getX()  + ship2.getY()  + "\n"
                                         + "SHIP3: " + ship3.getX()  + ship3.getY()  + "\n"
                                         + "SHIP4: " + ship4.getX()  + ship4.getY()  + "\n"
-                                        + "Event: " + (xp) + " " + " " + (yp) + "\n"
+                                        + "Event: " + (xp - xDelta) + " " + " " + (yp - yDelta) + "\n"
                                         + "Event0: " + (x - xDelta )+ " "+ " " + (y - yDelta) + "\n"
                                         + "Delta: " + xDelta+ " "+ " " + yDelta + "\n"
                                         + "SELECTED: " + ship.getName() + "\n"
