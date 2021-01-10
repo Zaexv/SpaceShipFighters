@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.view.View.OnTouchListener;
@@ -14,7 +15,9 @@ import android.widget.Space;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SpaceShipGame extends AppCompatActivity {
 
@@ -38,50 +41,60 @@ public class SpaceShipGame extends AppCompatActivity {
             public boolean onTouch(View view, MotionEvent event) {
                 final int x = (int) event.getRawX();
                 final int y = (int) event.getRawY();
+
                 int index = event.getActionIndex();
                 int pointer = event.getPointerId(index);
 
-                RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams)
-                        view.getLayoutParams();
+
                 SpaceShip ship = getShipFromView(view);
 
-               //This is to debug every action.
-              /*  debug.setText(
-                        "SHIP1: "+ ship1.getX()  + ship1.getY() + "\n"
-                                + "SHIP2: "+ ship2.getX()  + ship2.getY()  + "\n"
-                                + "SHIP3: "+ ship3.getX()  + ship3.getY()  + "\n"
-                                + "SHIP4: "+ ship4.getX()  + ship4.getY()  + "\n"
-                             //   + "Event: " + (xp - xDelta)+ " "+ " " + (yp - yDelta) + "\n"
-                                + "Event0: " + (x - xDelta)+ " "+ " " + (y - yDelta) + "\n"
+                debug.setText(
+                        "SHIP1: " + ship1.getX()  + ship1.getY() + "\n"
+                                + "SHIP2: " + ship2.getX()  + ship2.getY()  + "\n"
+                                + "SHIP3: " + ship3.getX()  + ship3.getY()  + "\n"
+                                + "SHIP4: " + ship4.getX()  + ship4.getY()  + "\n"
+                               // + "Event: " + (xp - xDelta) + " " + " " + (yp - yDelta) + "\n"
+                                + "Event0: " + (x - xDelta )+ " "+ " " + (y - yDelta) + "\n"
                                 + "Delta: " + xDelta+ " "+ " " + yDelta + "\n"
                                 + "SELECTED: " + ship.getName() + "\n"
-                             //   +" ClOSEST: " + closest.getName() + "\n"
+                                +"EVENT DETECTED: " + event.getActionMasked() + "\n"
                                 +" POINTER: " + pointer + "\n"
+                                +" THREADS: " + Thread.activeCount() + "\n"
                 );
-                */
+
                 switch (event.getActionMasked() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
+                        RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams)
+                                view.getLayoutParams();
                         xDelta = x - lParams.leftMargin;
                         yDelta = y - lParams.topMargin;
                         break;
                     case MotionEvent.ACTION_POINTER_DOWN:
                         //This piece of code take the relative position in the layout
                         int location[] = {0,0};
-
                         view.getLocationOnScreen(location);
+                        RelativeLayout.LayoutParams laParams = (RelativeLayout.LayoutParams)
+                                view.getLayoutParams();
                         int xp = (int) event.getX(index) + location[0];
                         int yp = (int) event.getY(index) + location[1];
 
+                        xDelta = x - laParams.leftMargin;
+                        yDelta = y - laParams.topMargin;
 
+                        Set<SpaceShip> spaceShipSet = new HashSet<>();
+                        spaceShipSet.add(ship1);
+                        spaceShipSet.add(ship2);
+                        spaceShipSet.add(ship3);
+                        spaceShipSet.add(ship4);
 
-                        xDelta = x - lParams.leftMargin;
-                        yDelta = y - lParams.topMargin;
-
-                        ship1.shoot((float)xp-xDelta,(float)yp-yDelta);
+                        //Get Closest ship to secondary finger and calculate shoot.
                         SpaceShip closest = getClosestShip(xp - xDelta,yp - yDelta);
+                        laParams = (RelativeLayout.LayoutParams)
+                                closest.getImageView().getLayoutParams();
+                        float  xDeltab = x - laParams.leftMargin;
+                        float  yDeltab = y - laParams.topMargin;
 
-                        //TODO Crear vector de disparo y pintarlo
-
+                        if(closest.isActive()) closest.shoot((float)xp-xDelta,(float)yp-yDelta, spaceShipSet);
 
                         debug.setText(
                                         "SHIP1: " + ship1.getX()  + ship1.getY() + "\n"
@@ -102,11 +115,13 @@ public class SpaceShipGame extends AppCompatActivity {
                         break;
 
                     case MotionEvent.ACTION_MOVE:
-                        lParams.leftMargin = x - xDelta;
-                        lParams.topMargin = y - yDelta;
-                        lParams.rightMargin = 0;
-                        lParams.bottomMargin = 0;
-                        view.setLayoutParams(lParams);
+                        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view
+                                .getLayoutParams();
+                        layoutParams.leftMargin = x - xDelta;
+                        layoutParams.topMargin = y - yDelta;
+                        layoutParams.rightMargin = 0;
+                        layoutParams.bottomMargin = 0;
+                        view.setLayoutParams(layoutParams);
                         break;
                 }
                 mainLayout.invalidate();
@@ -129,17 +144,23 @@ public class SpaceShipGame extends AppCompatActivity {
         spaceship4 = (ImageView) findViewById(R.id.imageP4);
 
         bullet1 = (ImageView)findViewById(R.id.bulletP1);
+        bullet1.setVisibility(View.INVISIBLE);
+        bullet2 = (ImageView)findViewById(R.id.bulletP2);
+        bullet2.setVisibility(View.INVISIBLE);
+        bullet3 = (ImageView)findViewById(R.id.bulletP3);
+        bullet3.setVisibility(View.INVISIBLE);
+        bullet4 = (ImageView)findViewById(R.id.bulletP4);
+        bullet4.setVisibility(View.INVISIBLE);
 
         //Defining SpaceShip Object
         ship1 = new SpaceShip(spaceship1, bullet1);
         ship1.setName("F21");
-        ship2 = new SpaceShip(spaceship2);
+        ship2 = new SpaceShip(spaceship2, bullet2);
         ship2.setName("Z8");
-        ship3 = new SpaceShip(spaceship3);
+        ship3 = new SpaceShip(spaceship3, bullet3);
         ship3.setName("A7");
-        ship4 = new SpaceShip(spaceship4);
+        ship4 = new SpaceShip(spaceship4, bullet4);
         ship4.setName("032");
-
 
         switch(numPlayers){
             case 2:
@@ -147,12 +168,32 @@ public class SpaceShipGame extends AppCompatActivity {
                 spaceship2.setVisibility(View.INVISIBLE);
                 spaceship4.setEnabled(false);
                 spaceship4.setVisibility(View.INVISIBLE);
+                spaceship1.setOnTouchListener(onTouchListener());
+                spaceship3.setOnTouchListener(onTouchListener());
+                ship1.setActive(true);
+                ship3.setActive(true);
+
                 break;
             case 3:
                 spaceship2.setEnabled(false);
                 spaceship2.setVisibility(View.INVISIBLE);
+                spaceship1.setOnTouchListener(onTouchListener());
+                spaceship3.setOnTouchListener(onTouchListener());
+                spaceship4.setOnTouchListener(onTouchListener());
+                ship1.setActive(true);
+                ship3.setActive(true);
+                ship4.setActive(true);
+                ship3.setActive(true);
                 break;
             case 4:
+                spaceship1.setOnTouchListener(onTouchListener());
+                spaceship2.setOnTouchListener(onTouchListener());
+                spaceship3.setOnTouchListener(onTouchListener());
+                spaceship4.setOnTouchListener(onTouchListener());
+                ship1.setActive(true);
+                ship2.setActive(true);
+                ship3.setActive(true);
+                ship4.setActive(true);
                 break;
         }
 
@@ -194,10 +235,11 @@ public class SpaceShipGame extends AppCompatActivity {
         min = Math.min(min,dp3);
         min = Math.min(min, dp4);
 
-        if(min == dp1) result = ship1;
-        if(min == dp2) result = ship2;
-        if(min == dp3) result = ship3;
-        if(min == dp4) result = ship4;
+        if(min == dp1 && ship1.isActive()) result = ship1;
+        if(min == dp2 && ship2.isActive()) result = ship2;
+        if(min == dp3 && ship3.isActive()) result = ship3;
+        if(min == dp4 && ship4.isActive()) result = ship4;
+        if(result == null) result = ship1;
 
         return result;
     }

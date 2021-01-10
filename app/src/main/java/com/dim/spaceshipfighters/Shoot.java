@@ -1,55 +1,61 @@
 package com.dim.spaceshipfighters;
 
+import android.animation.AnimatorSet;
+import android.view.View;
 import android.widget.ImageView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+
 public class Shoot implements Runnable {
-
-    private double x1,y1,x2,y2; //Parameters to create the line
     private ImageView bulletView;
+    private SpaceShip shooter;
+    private Set<SpaceShip> spaceShipSet;
+    Thread t;
 
 
-    public Shoot(double x1, double y1, double x2, double y2, ImageView bulletView) {
-        this.x1 = x1; //getX()
-        this.y1 = y1; //getY()
-        this.x2 = x2;
-        this.y2 = y2;
+    public Shoot(ImageView bulletView, SpaceShip shooter, Set<SpaceShip> spaceShipSet) {
+        this.shooter = shooter;
         this.bulletView = bulletView;
-    }
+        this.spaceShipSet = spaceShipSet;
+      }
 
     @Override
     public void run() {
-        int x = 0;
-
-        while (x < 10000){
-            shoot((float) (x*0.1));
+        long endTime = System.currentTimeMillis() + 1000;
+        long shootTime = System.currentTimeMillis() + 100;
+        boolean reached = false;
+        while(System.currentTimeMillis() < endTime && !reached) {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            x++;
+            if(System.currentTimeMillis() > shootTime){
+                for(SpaceShip s : spaceShipSet){
+                    System.out.println("Nave Coord" + s.getX() + s.getY());
+                   if(s.isActive() &&
+                           s.isPointInShip(bulletView.getX(), bulletView.getY())) {
+                       s.decreaseLife();
+                       reached = true;
+                       System.out.println("Le has dado a la nave " + s.getName());
+                   }
+                }
+            }
+        }
+        shooter.setShooting(false);
+    }
+
+    public void start () {
+        if (t == null) {
+            t = new Thread(this);
+            t.start();
         }
     }
-
-    private double setShootLine(double x, double x1, double y1, double x2, double y2){
-        return y1 + ((y2 - y1)/(x2 - x1))*(x - x1);
-    }
-
-    private double setShootLine2(double x, double x1, double y1, double x2, double y2){
-        //Same as setShootLine with -m
-        return y1 + (-(y2 - y1)/(x2 - x1))*(x - x1);
-    }
-
-    private void shoot(float x) {
-        if(x1 >= x2){ //X is at Left from Ship
-            bulletView.setX((float)x1 + x);
-            bulletView.setY((float)setShootLine2(
-                    x,x1,x2,x2,y2));
-        } else if(x1 < x2){ //X is at Right from Ship
-            bulletView.setX((float)x1 - x);
-            bulletView.setY((float)setShootLine(
-                    x, x1, x2 ,x2,y2));
-        }
-    }
-
 }
