@@ -18,6 +18,22 @@
         tools:context=".MainActivity">
 
         <ImageView
+            android:id="@+id/ship_shield1"
+            android:layout_width="115dp"
+            android:layout_height="72dp"
+            android:layout_alignStart="@+id/imageP1"
+            android:layout_alignTop="@+id/imageP1"
+            android:layout_alignEnd="@+id/imageP1"
+            android:layout_alignBottom="@+id/imageP1"
+            android:layout_marginStart="-16dp"
+            android:layout_marginTop="-41dp"
+            android:layout_marginEnd="-18dp"
+            android:layout_marginBottom="49dp"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/ship_shield"
+            tools:visibility="invisible" />
+
+        <ImageView
             android:id="@+id/bulletP1"
             android:layout_width="179dp"
             android:layout_height="198dp"
