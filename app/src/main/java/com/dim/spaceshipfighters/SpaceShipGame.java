@@ -172,13 +172,13 @@ public class SpaceShipGame extends AppCompatActivity {
         shield4.setVisibility(View.INVISIBLE);
 
         //Defining SpaceShip Object
-        ship1 = new SpaceShip(spaceship1, bullet1);
+        ship1 = new SpaceShip(spaceship1, bullet1, shield1);
         ship1.setName("F21");
-        ship2 = new SpaceShip(spaceship2, bullet2);
+        ship2 = new SpaceShip(spaceship2, bullet2, shield2);
         ship2.setName("Z8");
-        ship3 = new SpaceShip(spaceship3, bullet3);
+        ship3 = new SpaceShip(spaceship3, bullet3, shield3);
         ship3.setName("A7");
-        ship4 = new SpaceShip(spaceship4, bullet4);
+        ship4 = new SpaceShip(spaceship4, bullet4, shield4);
         ship4.setName("032");
 
         switch(numPlayers){

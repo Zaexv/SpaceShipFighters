@@ -167,13 +167,14 @@ public class SpaceShip {
     }
 
     public void decreaseLife(){
-        //TODO insertar animación de recepción de daño
-        if(this.lifes > 1){
-        this.lifes--;
+        if(this.shield) {
+            this.setShield(false);
+        } else if(this.lifes > 1){
+            this.lifes--;
         } else {
-        this.isActive = false;
-        this.lifes = 0;
-        this.imageView.setVisibility(View.INVISIBLE);
+            this.isActive = false;
+            this.lifes = 0;
+            this.imageView.setVisibility(View.INVISIBLE);
         }
     }
 }
