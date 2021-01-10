@@ -35,7 +35,6 @@ public class SpaceShipGame extends AppCompatActivity //implements GestureDetecto
     SpaceShip ship1, ship2, ship3,ship4;
     private ViewGroup mainLayout;
     TextView debug,debug2;
-    Button button;
     GestureDetector gestureDetector;
 
     private int xDelta;
@@ -176,7 +175,7 @@ public class SpaceShipGame extends AppCompatActivity //implements GestureDetecto
 
         // Otro intento de double tap
 
-        button = findViewById(R.id.button_Shield1);
+
         shield1 = findViewById(R.id.ship_shield1);
 
 
