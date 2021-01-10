@@ -32,13 +32,12 @@ public class SpaceShipGame extends AppCompatActivity {
     SpaceShip ship1, ship2, ship3,ship4;
     private ViewGroup mainLayout;
     GestureDetector gestureDetector;
-    TextView debug,debug2;
-
+    TextView debug;
 
     private int xDelta;
     private int yDelta;
 
-    //Define Listener for Images.
+    //Define Listener for every ImageViews.
     private OnTouchListener onTouchListener() {
 
         return new OnTouchListener() {
@@ -49,27 +48,10 @@ public class SpaceShipGame extends AppCompatActivity {
                 final int x = (int) event.getRawX();
                 final int y = (int) event.getRawY();
                 int index = event.getActionIndex();
-                int pointer = event.getPointerId(index);
 
-
+                //If there is a gesture, get which View has invoked it.
                 if (gestureDetector.onTouchEvent(event)) doubleTapView = (ImageView) view;
 
-                SpaceShip ship = getShipFromView(view);
-/*
-                debug.setText(
-                        "SHIP1: " + ship1.getX()  + ship1.getY() + "\n"
-                                + "SHIP2: " + ship2.getX()  + ship2.getY()  + "\n"
-                                + "SHIP3: " + ship3.getX()  + ship3.getY()  + "\n"
-                                + "SHIP4: " + ship4.getX()  + ship4.getY()  + "\n"
-                               // + "Event: " + (xp - xDelta) + " " + " " + (yp - yDelta) + "\n"
-                                + "Event0: " + (x - xDelta )+ " "+ " " + (y - yDelta) + "\n"
-                                + "Delta: " + xDelta+ " "+ " " + yDelta + "\n"
-                                + "SELECTED: " + ship.getName() + "\n"
-                                +"EVENT DETECTED: " + event.getActionMasked() + "\n"
-                                +" POINTER: " + pointer + "\n"
-                                +" THREADS: " + Thread.activeCount() + "\n"
-                );
-*/
                 switch (event.getActionMasked() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
                         RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams)
@@ -89,35 +71,11 @@ public class SpaceShipGame extends AppCompatActivity {
                         xDelta = x - laParams.leftMargin;
                         yDelta = y - laParams.topMargin;
 
-                        Set<SpaceShip> spaceShipSet = new HashSet<>();
-                        spaceShipSet.add(ship1);
-                        spaceShipSet.add(ship2);
-                        spaceShipSet.add(ship3);
-                        spaceShipSet.add(ship4);
+                        Set<SpaceShip> spaceShipSet = getSpaceShipSet();
 
                         //Get Closest ship to secondary finger and calculate shoot.
                         SpaceShip closest = getClosestShip(xp - xDelta,yp - yDelta);
-                        laParams = (RelativeLayout.LayoutParams)
-                                closest.getImageView().getLayoutParams();
-                        float  xDeltab = x - laParams.leftMargin;
-                        float  yDeltab = y - laParams.topMargin;
-
                         if(closest.isActive()) closest.shoot((float)xp-xDelta,(float)yp-yDelta, spaceShipSet);
-/*
-                        debug.setText(
-                                        "SHIP1: " + ship1.getX()  + ship1.getY() + "\n"
-                                        + "SHIP2: " + ship2.getX()  + ship2.getY()  + "\n"
-                                        + "SHIP3: " + ship3.getX()  + ship3.getY()  + "\n"
-                                        + "SHIP4: " + ship4.getX()  + ship4.getY()  + "\n"
-                                        + "Event: " + (xp - xDelta) + " " + " " + (yp - yDelta) + "\n"
-                                        + "Event0: " + (x - xDelta )+ " "+ " " + (y - yDelta) + "\n"
-                                        + "Delta: " + xDelta+ " "+ " " + yDelta + "\n"
-                                        + "SELECTED: " + ship.getName() + "\n"
-                                        +" ClOSEST: " + closest.getName() + "\n"
-                                        +" POINTER: " + pointer + "\n"
-                        );
-
- */
                         break;
 
                     case MotionEvent.ACTION_POINTER_UP:
@@ -144,15 +102,21 @@ public class SpaceShipGame extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_space_ship_game);
+        //Get Num Players
         numPlayers = getIntent().getIntExtra("numPlayers", 1);
         gestureDetector = new GestureDetector(this,new GestureListener());
-        debug = (TextView) findViewById(R.id.debug); //View to Debug
 
+        //Debug View
+        debug = (TextView) findViewById(R.id.debug);
+        debug.setVisibility(View.INVISIBLE); //Comment this line to Debug
+
+        //Defining SpaceShip Views
         spaceship1 = (ImageView) findViewById(R.id.imageP1);
         spaceship2 = (ImageView) findViewById(R.id.imageP2);
         spaceship3 = (ImageView) findViewById(R.id.imageP3);
         spaceship4 = (ImageView) findViewById(R.id.imageP4);
 
+        //Defining Bullets
         bullet1 = (ImageView)findViewById(R.id.bulletP1);
         bullet1.setVisibility(View.INVISIBLE);
         bullet2 = (ImageView)findViewById(R.id.bulletP2);
@@ -162,6 +126,7 @@ public class SpaceShipGame extends AppCompatActivity {
         bullet4 = (ImageView)findViewById(R.id.bulletP4);
         bullet4.setVisibility(View.INVISIBLE);
 
+        //Defining Shields
         shield1 = (ImageView)findViewById(R.id.shieldP1);
         shield1.setVisibility(View.INVISIBLE);
         shield2 = (ImageView)findViewById(R.id.shieldP2);
@@ -191,7 +156,6 @@ public class SpaceShipGame extends AppCompatActivity {
                 spaceship3.setOnTouchListener(onTouchListener());
                 ship1.setActive(true);
                 ship3.setActive(true);
-
                 break;
             case 3:
                 spaceship2.setEnabled(false);
@@ -215,13 +179,38 @@ public class SpaceShipGame extends AppCompatActivity {
                 ship4.setActive(true);
                 break;
         }
-
         mainLayout = (RelativeLayout) findViewById(R.id.main);
-
     }
 
-    public SpaceShip getShipFromView(View v){
-        SpaceShip result = new SpaceShip((ImageView)v); 
+    //Gesture Detector. This only detects Double Taps.
+    public class GestureListener extends
+            GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        //
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            SpaceShip s = getShipFromView(doubleTapView);
+            s.setShield(true);
+            return true;
+        }
+    }
+
+    /* ---------- AUXILIARY FUNCTIONS ------------------*/
+    private Set<SpaceShip> getSpaceShipSet() {
+        Set<SpaceShip> spaceShipSet = new HashSet<>();
+        spaceShipSet.add(ship1);
+        spaceShipSet.add(ship2);
+        spaceShipSet.add(ship3);
+        spaceShipSet.add(ship4);
+        return spaceShipSet;
+    }
+    private SpaceShip getShipFromView(View v){
+        SpaceShip result = new SpaceShip((ImageView)v);
 
         int viewid = v.getId();
 
@@ -233,11 +222,7 @@ public class SpaceShipGame extends AppCompatActivity {
         return result;
     }
 
-    public double getDistanceBetweenPoints(double x1, double y1, double x2, double y2) {
-        return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-    }
-
-    public SpaceShip getClosestShip(int px, int py){
+    private SpaceShip getClosestShip(int px, int py){
         SpaceShip result = null;
 
         double dp1 = getDistanceBetweenPoints(px,py, ship1.getX(),ship1.getY());
@@ -258,38 +243,8 @@ public class SpaceShipGame extends AppCompatActivity {
         return result;
     }
 
-    //Gesture Detector
-    public class GestureListener extends
-            GestureDetector.SimpleOnGestureListener {
-
-        @Override
-        public boolean onDown(MotionEvent e) {
-
-            return true;
-        }
-
-        // event when double tap occurs
-        @Override
-        public boolean onDoubleTap(MotionEvent e) {
-            debug.setText(
-                    "SHIP1: " + ship1.getX()  + ship1.getY() + "\n"
-                            + "SHIP2: " + ship2.getX()  + ship2.getY()  + "\n"
-                            + "SHIP3: " + ship3.getX()  + ship3.getY()  + "\n"
-                            + "SHIP4: " + ship4.getX()  + ship4.getY()  + "\n"
-                            + "Event0: " + (e.getX() - xDelta )+ " "+ " " + (e.getY() - yDelta) + "\n"
-                            + "Delta: " + xDelta+ " "+ " " + yDelta + "\n"
-                             + "Se detecto un doble tap en " + doubleTapView.getId()
-            );
-
-
-            SpaceShip s = getShipFromView(doubleTapView);
-            s.setShield(true);
-
-            System.out.println("Double tap detectado");
-            return true;
-        }
+    private double getDistanceBetweenPoints(double x1, double y1, double x2, double y2) {
+        return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
-
-
 
 }

@@ -11,6 +11,7 @@
         android:id="@+id/VerticalLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/pixel_space_back"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="53dp"
         tools:layout_editor_absoluteY="101dp">
@@ -19,8 +20,13 @@
             android:id="@+id/game_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:backgroundTint="@color/design_default_color_error"
             android:text="Space Ship Fighters"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="@color/white"
+            android:textDirection="ltr" />
 
         <Button
             android:id="@+id/button2p"
