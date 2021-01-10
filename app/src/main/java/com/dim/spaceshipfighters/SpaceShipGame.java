@@ -38,12 +38,14 @@ public class SpaceShipGame extends AppCompatActivity {
             public boolean onTouch(View view, MotionEvent event) {
                 final int x = (int) event.getRawX();
                 final int y = (int) event.getRawY();
+
                 int index = event.getActionIndex();
                 int pointer = event.getPointerId(index);
 
                 RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams)
                         view.getLayoutParams();
                 SpaceShip ship = getShipFromView(view);
+
                 debug.setText(
                         "SHIP1: " + ship1.getX()  + ship1.getY() + "\n"
                                 + "SHIP2: " + ship2.getX()  + ship2.getY()  + "\n"
@@ -55,6 +57,7 @@ public class SpaceShipGame extends AppCompatActivity {
                                 + "SELECTED: " + ship.getName() + "\n"
                                 +"EVENT DETECTED: " + event.getActionMasked() + "\n"
                                 +" POINTER: " + pointer + "\n"
+                                +" THREADS: " + Thread.activeCount() + "\n"
                 );
 
                 switch (event.getActionMasked() & MotionEvent.ACTION_MASK) {
@@ -65,12 +68,10 @@ public class SpaceShipGame extends AppCompatActivity {
                     case MotionEvent.ACTION_POINTER_DOWN:
                         //This piece of code take the relative position in the layout
                         int location[] = {0,0};
-
                         view.getLocationOnScreen(location);
+
                         int xp = (int) event.getX(index) + location[0];
                         int yp = (int) event.getY(index) + location[1];
-
-
 
                         xDelta = x - lParams.leftMargin;
                         yDelta = y - lParams.topMargin;
@@ -104,9 +105,9 @@ public class SpaceShipGame extends AppCompatActivity {
                         lParams.topMargin = y - yDelta;
                         lParams.rightMargin = 0;
                         lParams.bottomMargin = 0;
-                        System.out.println("Changing position to View" + ship.getName());
                         view.setLayoutParams(lParams);
                         break;
+
                 }
                 mainLayout.invalidate();
                 return true;

@@ -3,6 +3,8 @@ package com.dim.spaceshipfighters;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
@@ -31,14 +33,16 @@ public class Shoot implements Runnable {
                 e.printStackTrace();
             }
             System.out.println("POSX: " + posX + " posY: " + posY + "ANGLE: " + angle);
-            float posXT = (float) (posX - speed * x * 0.01 * cos(angle));
-            float posYT = (float) (posY - speed * x * 0.01 * sin(angle));
+            float posXT = (float) (posX - speed * x * 1 * cos(angle));
+            float posYT = (float) (posY - speed * x * 1 * sin(angle));
+
             bulletView.setX(posXT);
             bulletView.setY(posYT);
             x++;
             posX = posXT;
             posY = posYT;
         }
+
         bulletView.setVisibility(View.INVISIBLE);
         bulletView.setX(0);
         bulletView.setY(0);

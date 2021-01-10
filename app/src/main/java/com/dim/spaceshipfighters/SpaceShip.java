@@ -76,6 +76,7 @@ public class SpaceShip {
     public void shoot(float x2, float y2) {
 
         if(!shooting) {
+            setShooting(true);
             float centreX = imageView.getX() - imageView.getWidth() / 2;
             float centreY = imageView.getY() + imageView.getHeight() / 2;
             float deltaX = (float) (x2 - centreX);
@@ -83,7 +84,6 @@ public class SpaceShip {
             float angle = (float) atan2(deltaY, deltaX);
             float speed = 10;
             float degrees = (float) ((angle > 0 ? angle : (2 * PI + angle)) * 360 / (2 * PI));
-
             float posX = (float) (centreX - speed * 20 * cos(angle));
             float posY = (float) (centreY - speed * 20 * sin(angle));
             //System.out.println(angle);
@@ -92,10 +92,10 @@ public class SpaceShip {
 
             bulletView.setVisibility(View.VISIBLE);
             Shoot s = new Shoot(posX, posY, bulletView, angle, this);
-            setShooting(true);
+
+
             Thread t = new Thread(s);
             t.start();
-
         }
     }
 }
