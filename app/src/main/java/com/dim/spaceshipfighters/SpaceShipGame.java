@@ -94,7 +94,7 @@ public class SpaceShipGame extends AppCompatActivity {
                         float  xDeltab = x - laParams.leftMargin;
                         float  yDeltab = y - laParams.topMargin;
 
-                        closest.shoot((float)xp-xDelta,(float)yp-yDelta, spaceShipSet);
+                        if(closest.isActive()) closest.shoot((float)xp-xDelta,(float)yp-yDelta, spaceShipSet);
 
                         debug.setText(
                                         "SHIP1: " + ship1.getX()  + ship1.getY() + "\n"
@@ -239,7 +239,8 @@ public class SpaceShipGame extends AppCompatActivity {
         if(min == dp2 && ship2.isActive()) result = ship2;
         if(min == dp3 && ship3.isActive()) result = ship3;
         if(min == dp4 && ship4.isActive()) result = ship4;
-        if(result == null) return ship1;
+        if(result == null) result = ship1;
+
         return result;
     }
 

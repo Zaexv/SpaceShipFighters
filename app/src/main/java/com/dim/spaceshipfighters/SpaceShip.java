@@ -138,12 +138,17 @@ public class SpaceShip {
        return r.contains((int)x, (int) y);
     }
 
+    public boolean isPointCloserToShip(float x, float y){
+        Rect r =  new Rect(imageView.getLeft()-imageView.getWidth() + 200,imageView.getTop() + 200, imageView.getRight()-imageView.getWidth() +200 ,imageView.getBottom() +200);
+        return r.contains((int)x, (int) y);
+    }
+
     public void decreaseLife(){
         //TODO insertar animación de recepción de daño
         if(this.lifes > 1){
         this.lifes--;
         } else {
-        this.isActive = false;     
+        this.isActive = false;
         this.lifes = 0;
         this.imageView.setVisibility(View.INVISIBLE);
         }
