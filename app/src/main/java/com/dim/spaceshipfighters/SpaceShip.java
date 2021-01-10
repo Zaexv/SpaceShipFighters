@@ -3,6 +3,11 @@ package com.dim.spaceshipfighters;
 import android.view.View;
 import android.widget.ImageView;
 
+import static java.lang.Math.PI;
+import static java.lang.Math.atan2;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+
 //This is the SpaceShip class used.
 public class SpaceShip {
 
@@ -10,7 +15,7 @@ public class SpaceShip {
 
     private int lifes;
     private int pointerused;
-    private boolean shield;
+    private boolean shield, shooting;
     private ImageView imageView, bulletView;
     private String name;
 
@@ -18,6 +23,7 @@ public class SpaceShip {
         name = "default";
         imageView = view;
         lifes = MAX_LIFES;
+        shooting = false;
         shield = false;
         pointerused = -1;
     }
@@ -26,6 +32,7 @@ public class SpaceShip {
         name = "default";
         imageView = view;
         lifes = MAX_LIFES;
+        shooting = false;
         shield = false;
         pointerused = -1;
         this.bulletView = bulletView;
@@ -58,31 +65,37 @@ public class SpaceShip {
         return this.imageView.getY();
     }
 
-    public double setShootLine(double x, double x1, double y1, double x2, double y2){
-        return y1 + ((y2 - y1)/(x2 - x1))*(x - x1);
+    public boolean isShooting() {
+        return shooting;
     }
 
-    public double setShootLine2(double x, double x1, double y1, double x2, double y2){
-        //Same as setShootLine with -m
-        return y1 + (-(y2 - y1)/(x2 - x1))*(x - x1);
+    public void setShooting(boolean shooting) {
+        this.shooting = shooting;
     }
 
     public void shoot(float x2, float y2) {
-                //TODO
-        /*if(getX() >= x2){ //X is at Left from Ship
-                        bulletView.setX(imageView.getX() + 250);
-                        bulletView.setY((float)setShootLine2(
-                                50,getX(),getY(),x2,y2));
-                } else if(getX() < x2){ //X is at Right from Ship
-                    bulletView.setX(imageView.getX() - imageView.getWidth() - 250);
-                    bulletView.setY((float)setShootLine(
-                            -50, getX(), getY() ,x2,y2));
-                }
 
-         */
+        if(!shooting) {
+            float centreX = imageView.getX() - imageView.getWidth() / 2;
+            float centreY = imageView.getY() + imageView.getHeight() / 2;
+            float deltaX = (float) (x2 - centreX);
+            float deltaY = (float) (y2 - centreY);
+            float angle = (float) atan2(deltaY, deltaX);
+            float speed = 10;
+            float degrees = (float) ((angle > 0 ? angle : (2 * PI + angle)) * 360 / (2 * PI));
 
-        Shoot s = new Shoot(getX(),getY(),x2,y2,bulletView);
-        Thread t = new Thread(s);
-        t.start();
+            float posX = (float) (centreX - speed * 20 * cos(angle));
+            float posY = (float) (centreY - speed * 20 * sin(angle));
+            //System.out.println(angle);
+            bulletView.setX(posX);
+            bulletView.setY(posY);
+
+            bulletView.setVisibility(View.VISIBLE);
+            Shoot s = new Shoot(posX, posY, bulletView, angle, this);
+            setShooting(true);
+            Thread t = new Thread(s);
+            t.start();
+
         }
+    }
 }

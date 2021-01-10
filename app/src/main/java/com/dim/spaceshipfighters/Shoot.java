@@ -1,55 +1,49 @@
 package com.dim.spaceshipfighters;
 
+import android.view.View;
 import android.widget.ImageView;
 
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+
 public class Shoot implements Runnable {
-
-    private double x1,y1,x2,y2; //Parameters to create the line
+    private SpaceShip shooter;
+    private float posX,posY; //Parameters to create the line
     private ImageView bulletView;
+    private static int speed = 10;
+    private float angle;
 
-
-    public Shoot(double x1, double y1, double x2, double y2, ImageView bulletView) {
-        this.x1 = x1; //getX()
-        this.y1 = y1; //getY()
-        this.x2 = x2;
-        this.y2 = y2;
+    public Shoot(float posX, float posY, ImageView bulletView, float angle, SpaceShip shooter) {
+        this.shooter = shooter;
+        this.posX = posX;
+        this.posY = posY;
         this.bulletView = bulletView;
+        this.angle = angle;
     }
 
     @Override
     public void run() {
         int x = 0;
-
-        while (x < 10000){
-            shoot((float) (x*0.1));
+        while (x < 150) {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            System.out.println("POSX: " + posX + " posY: " + posY + "ANGLE: " + angle);
+            float posXT = (float) (posX - speed * x * 0.01 * cos(angle));
+            float posYT = (float) (posY - speed * x * 0.01 * sin(angle));
+            bulletView.setX(posXT);
+            bulletView.setY(posYT);
             x++;
+            posX = posXT;
+            posY = posYT;
         }
-    }
+        bulletView.setVisibility(View.INVISIBLE);
+        bulletView.setX(0);
+        bulletView.setY(0);
+        shooter.setShooting(false);
 
-    private double setShootLine(double x, double x1, double y1, double x2, double y2){
-        return y1 + ((y2 - y1)/(x2 - x1))*(x - x1);
-    }
-
-    private double setShootLine2(double x, double x1, double y1, double x2, double y2){
-        //Same as setShootLine with -m
-        return y1 + (-(y2 - y1)/(x2 - x1))*(x - x1);
-    }
-
-    private void shoot(float x) {
-        if(x1 >= x2){ //X is at Left from Ship
-            bulletView.setX((float)x1 + x);
-            bulletView.setY((float)setShootLine2(
-                    x,x1,x2,x2,y2));
-        } else if(x1 < x2){ //X is at Right from Ship
-            bulletView.setX((float)x1 - x);
-            bulletView.setY((float)setShootLine(
-                    x, x1, x2 ,x2,y2));
-        }
     }
 
 }

@@ -44,21 +44,19 @@ public class SpaceShipGame extends AppCompatActivity {
                 RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams)
                         view.getLayoutParams();
                 SpaceShip ship = getShipFromView(view);
-
-               //This is to debug every action.
-              /*  debug.setText(
-                        "SHIP1: "+ ship1.getX()  + ship1.getY() + "\n"
-                                + "SHIP2: "+ ship2.getX()  + ship2.getY()  + "\n"
-                                + "SHIP3: "+ ship3.getX()  + ship3.getY()  + "\n"
-                                + "SHIP4: "+ ship4.getX()  + ship4.getY()  + "\n"
-                             //   + "Event: " + (xp - xDelta)+ " "+ " " + (yp - yDelta) + "\n"
-                                + "Event0: " + (x - xDelta)+ " "+ " " + (y - yDelta) + "\n"
+                debug.setText(
+                        "SHIP1: " + ship1.getX()  + ship1.getY() + "\n"
+                                + "SHIP2: " + ship2.getX()  + ship2.getY()  + "\n"
+                                + "SHIP3: " + ship3.getX()  + ship3.getY()  + "\n"
+                                + "SHIP4: " + ship4.getX()  + ship4.getY()  + "\n"
+                               // + "Event: " + (xp - xDelta) + " " + " " + (yp - yDelta) + "\n"
+                                + "Event0: " + (x - xDelta )+ " "+ " " + (y - yDelta) + "\n"
                                 + "Delta: " + xDelta+ " "+ " " + yDelta + "\n"
                                 + "SELECTED: " + ship.getName() + "\n"
-                             //   +" ClOSEST: " + closest.getName() + "\n"
+                                +"EVENT DETECTED: " + event.getActionMasked() + "\n"
                                 +" POINTER: " + pointer + "\n"
                 );
-                */
+
                 switch (event.getActionMasked() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
                         xDelta = x - lParams.leftMargin;
@@ -106,6 +104,7 @@ public class SpaceShipGame extends AppCompatActivity {
                         lParams.topMargin = y - yDelta;
                         lParams.rightMargin = 0;
                         lParams.bottomMargin = 0;
+                        System.out.println("Changing position to View" + ship.getName());
                         view.setLayoutParams(lParams);
                         break;
                 }
@@ -129,6 +128,7 @@ public class SpaceShipGame extends AppCompatActivity {
         spaceship4 = (ImageView) findViewById(R.id.imageP4);
 
         bullet1 = (ImageView)findViewById(R.id.bulletP1);
+        bullet1.setVisibility(View.INVISIBLE);
 
         //Defining SpaceShip Object
         ship1 = new SpaceShip(spaceship1, bullet1);
