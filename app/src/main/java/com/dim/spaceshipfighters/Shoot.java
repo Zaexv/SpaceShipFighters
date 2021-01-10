@@ -43,6 +43,7 @@ public class Shoot implements Runnable {
                    if(s.isActive() &&
                            s.isPointInShip(bulletView.getX(), bulletView.getY())) {
                        s.decreaseLife();
+                       bulletView.setVisibility(View.INVISIBLE);
                        reached = true;
                        System.out.println("Le has dado a la nave " + s.getName());
                    }

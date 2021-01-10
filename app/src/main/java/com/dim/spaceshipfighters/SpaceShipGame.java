@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +23,15 @@ import java.util.Set;
 public class SpaceShipGame extends AppCompatActivity {
 
     private int numPlayers; //Stores num of players in-game
-    ImageView spaceship1, spaceship2, spaceship3, spaceship4, bullet1,bullet2,bullet3,bullet4;
+    ImageView
+            spaceship1, spaceship2, spaceship3, spaceship4,
+            bullet1,bullet2,bullet3,bullet4,
+            shield1, shield2, shield3, shield4,
+            doubleTapView;
+
     SpaceShip ship1, ship2, ship3,ship4;
     private ViewGroup mainLayout;
+    GestureDetector gestureDetector;
     TextView debug,debug2;
 
 
@@ -41,13 +48,14 @@ public class SpaceShipGame extends AppCompatActivity {
             public boolean onTouch(View view, MotionEvent event) {
                 final int x = (int) event.getRawX();
                 final int y = (int) event.getRawY();
-
                 int index = event.getActionIndex();
                 int pointer = event.getPointerId(index);
 
 
-                SpaceShip ship = getShipFromView(view);
+                if (gestureDetector.onTouchEvent(event)) doubleTapView = (ImageView) view;
 
+                SpaceShip ship = getShipFromView(view);
+/*
                 debug.setText(
                         "SHIP1: " + ship1.getX()  + ship1.getY() + "\n"
                                 + "SHIP2: " + ship2.getX()  + ship2.getY()  + "\n"
@@ -61,7 +69,7 @@ public class SpaceShipGame extends AppCompatActivity {
                                 +" POINTER: " + pointer + "\n"
                                 +" THREADS: " + Thread.activeCount() + "\n"
                 );
-
+*/
                 switch (event.getActionMasked() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
                         RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams)
@@ -95,7 +103,7 @@ public class SpaceShipGame extends AppCompatActivity {
                         float  yDeltab = y - laParams.topMargin;
 
                         if(closest.isActive()) closest.shoot((float)xp-xDelta,(float)yp-yDelta, spaceShipSet);
-
+/*
                         debug.setText(
                                         "SHIP1: " + ship1.getX()  + ship1.getY() + "\n"
                                         + "SHIP2: " + ship2.getX()  + ship2.getY()  + "\n"
@@ -108,6 +116,8 @@ public class SpaceShipGame extends AppCompatActivity {
                                         +" ClOSEST: " + closest.getName() + "\n"
                                         +" POINTER: " + pointer + "\n"
                         );
+
+ */
                         break;
 
                     case MotionEvent.ACTION_POINTER_UP:
@@ -135,7 +145,7 @@ public class SpaceShipGame extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_space_ship_game);
         numPlayers = getIntent().getIntExtra("numPlayers", 1);
-
+        gestureDetector = new GestureDetector(this,new GestureListener());
         debug = (TextView) findViewById(R.id.debug); //View to Debug
 
         spaceship1 = (ImageView) findViewById(R.id.imageP1);
@@ -151,6 +161,15 @@ public class SpaceShipGame extends AppCompatActivity {
         bullet3.setVisibility(View.INVISIBLE);
         bullet4 = (ImageView)findViewById(R.id.bulletP4);
         bullet4.setVisibility(View.INVISIBLE);
+
+        shield1 = (ImageView)findViewById(R.id.shieldP1);
+        shield1.setVisibility(View.INVISIBLE);
+        shield2 = (ImageView)findViewById(R.id.shieldP2);
+        shield2.setVisibility(View.INVISIBLE);
+        shield3 = (ImageView)findViewById(R.id.shieldP3);
+        shield3.setVisibility(View.INVISIBLE);
+        shield4 = (ImageView)findViewById(R.id.shieldP4);
+        shield4.setVisibility(View.INVISIBLE);
 
         //Defining SpaceShip Object
         ship1 = new SpaceShip(spaceship1, bullet1);
@@ -199,11 +218,6 @@ public class SpaceShipGame extends AppCompatActivity {
 
         mainLayout = (RelativeLayout) findViewById(R.id.main);
 
-        //TODO Mover a los correspondientes cases para evitar bugs.
-        spaceship1.setOnTouchListener(onTouchListener());
-        spaceship2.setOnTouchListener(onTouchListener());
-        spaceship3.setOnTouchListener(onTouchListener());
-        spaceship4.setOnTouchListener(onTouchListener());
     }
 
     public SpaceShip getShipFromView(View v){
@@ -243,5 +257,39 @@ public class SpaceShipGame extends AppCompatActivity {
 
         return result;
     }
+
+    //Gesture Detector
+    public class GestureListener extends
+            GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+
+            return true;
+        }
+
+        // event when double tap occurs
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            debug.setText(
+                    "SHIP1: " + ship1.getX()  + ship1.getY() + "\n"
+                            + "SHIP2: " + ship2.getX()  + ship2.getY()  + "\n"
+                            + "SHIP3: " + ship3.getX()  + ship3.getY()  + "\n"
+                            + "SHIP4: " + ship4.getX()  + ship4.getY()  + "\n"
+                            + "Event0: " + (e.getX() - xDelta )+ " "+ " " + (e.getY() - yDelta) + "\n"
+                            + "Delta: " + xDelta+ " "+ " " + yDelta + "\n"
+                             + "Se detecto un doble tap en " + doubleTapView.getId()
+            );
+
+
+            SpaceShip s = getShipFromView(doubleTapView);
+            s.setShield(true);
+
+            System.out.println("Double tap detectado");
+            return true;
+        }
+    }
+
+
 
 }

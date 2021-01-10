@@ -27,7 +27,7 @@ public class SpaceShip {
     private Shoot shoot;
     private int pointerused;
     private boolean shield, shooting;
-    private ImageView imageView, bulletView;
+    private ImageView imageView, bulletView, shieldView;
     private String name;
 
     public SpaceShip(ImageView view){
@@ -51,11 +51,34 @@ public class SpaceShip {
         this.bulletView = bulletView;
     }
 
+    public SpaceShip(ImageView view , ImageView bulletView, ImageView shieldView){
+        this.isActive = false;
+        name = "default";
+        imageView = view;
+        lifes = MAX_LIFES;
+        shooting = false;
+        shield = false;
+        pointerused = -1;
+        this.bulletView = bulletView;
+        this.shieldView = shieldView;
+    }
+
     public void setPointer(int pointer){
         pointerused = pointer;
     }
     public int getPointer(){
        return this.pointerused;
+    }
+
+
+    public boolean isShield() {
+        return shield;
+    }
+
+    public void setShield(boolean shield) {
+        if(shield)shieldView.setVisibility(View.VISIBLE);
+            else shieldView.setVisibility(View.INVISIBLE);
+        this.shield = shield;
     }
 
     public boolean isActive() {
