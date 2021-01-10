@@ -3,10 +3,12 @@ package com.dim.spaceshipfighters;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.view.View;
 import android.view.animation.PathInterpolator;
 import android.widget.ImageView;
 
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -18,7 +20,7 @@ import static java.lang.Math.sin;
 //This is the SpaceShip class used.
 public class SpaceShip {
 
-    private static int MAX_LIFES;
+    private static int MAX_LIFES = 3;
 
     private int lifes;
     private Shoot shoot;
@@ -85,8 +87,7 @@ public class SpaceShip {
         return shoot;
     }
 
-
-    public void shoot(float x2, float y2) {
+    public void shoot(float x2, float y2, Set<SpaceShip> spaceShipSet) {
         if(!shooting) {
             bulletView.setVisibility(View.VISIBLE);
             setShooting(true);
@@ -99,21 +100,37 @@ public class SpaceShip {
             float degrees = (float) ((angle > 0 ? angle : (2 * PI + angle)) * 360 / (2 * PI));
             float posX = (float) (centreX - speed * 1000 * cos(angle));
             float posY = (float) (centreY - speed * 1000 * sin(angle));
-            //System.out.println(angle);
-            bulletView.setX(posX);
-            bulletView.setY(posY);
 
-            //Shoot aniation;
-            ObjectAnimator animation1;
-            ObjectAnimator animation2;
-            animation1 = ObjectAnimator.ofFloat(bulletView, "x", centreX, posX);
-            animation2 = ObjectAnimator.ofFloat(bulletView, "y", centreY, posY);
-            AnimatorSet set = new AnimatorSet();
-            set.setDuration(1000);
-            set.playTogether(animation1, animation2);
-            set.start();
-            shoot = new Shoot(bulletView, this, set);
+            //Shoot animation;
+            AnimatorSet set = animateFromTo(centreX, centreY, posX, posY);
+            shoot = new Shoot(bulletView, this, spaceShipSet);
             shoot.start();
+        }
+    }
+
+    private AnimatorSet animateFromTo(float centreX, float centreY, float posX, float posY) {
+        ObjectAnimator animation1;
+        ObjectAnimator animation2;
+        animation1 = ObjectAnimator.ofFloat(bulletView, "x", centreX, posX);
+        animation2 = ObjectAnimator.ofFloat(bulletView, "y", centreY, posY);
+        AnimatorSet set = new AnimatorSet();
+        set.setDuration(1000);
+        set.playTogether(animation1, animation2);
+        set.start();
+        return set;
+    }
+
+    public boolean isPointInShip(float x, float y){
+       Rect r =  new Rect(imageView.getLeft()-imageView.getWidth(),imageView.getTop(), imageView.getRight()-imageView.getWidth(),imageView.getBottom());
+       return r.contains((int)x, (int) y);
+    }
+
+    public void decreaseLife(){
+        if(this.lifes > 1){
+        this.lifes--;
+        } else {
+        this.lifes = 0;
+        this.imageView.setVisibility(View.INVISIBLE);
         }
     }
 

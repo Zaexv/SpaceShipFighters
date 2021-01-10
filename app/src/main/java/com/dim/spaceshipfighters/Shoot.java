@@ -6,6 +6,7 @@ import android.widget.ImageView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -15,24 +16,39 @@ import static java.lang.Math.sin;
 public class Shoot implements Runnable {
     private ImageView bulletView;
     private SpaceShip shooter;
-    private AnimatorSet set;
+    private Set<SpaceShip> spaceShipSet;
     Thread t;
 
 
-    public Shoot(ImageView bulletView, SpaceShip shooter, AnimatorSet set) {
+    public Shoot(ImageView bulletView, SpaceShip shooter, Set<SpaceShip> spaceShipSet) {
         this.shooter = shooter;
         this.bulletView = bulletView;
+        this.spaceShipSet = spaceShipSet;
       }
 
     @Override
     public void run() {
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        long endTime = System.currentTimeMillis() + 1000;
+        long shootTime = System.currentTimeMillis() + 100;
+        boolean reached = false;
+        while(System.currentTimeMillis() < endTime && !reached) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if(System.currentTimeMillis() > shootTime){
+                for(SpaceShip s : spaceShipSet){
+                    System.out.println("Nave Coord" + s.getX() + s.getY());
+                   if(s.isPointInShip(bulletView.getX(), bulletView.getY())) {
+                       s.decreaseLife();
+                       reached = true;
+                       System.out.println("Le has dado a la nave " + s.getName());
+                   }
+                }
+            }
         }
         shooter.setShooting(false);
-        System.out.println(bulletView.getX()+  ", "+ bulletView.getY());
     }
 
     public void start () {

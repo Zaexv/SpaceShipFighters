@@ -15,7 +15,9 @@ import android.widget.Space;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SpaceShipGame extends AppCompatActivity {
 
@@ -79,7 +81,12 @@ public class SpaceShipGame extends AppCompatActivity {
                         xDelta = x - laParams.leftMargin;
                         yDelta = y - laParams.topMargin;
 
-                        ship1.shoot((float)xp-xDelta,(float)yp-yDelta);
+                        Set<SpaceShip> spaceShipSet = new HashSet<>();
+                        spaceShipSet.add(ship1);
+                        spaceShipSet.add(ship2);
+                        spaceShipSet.add(ship3);
+                        spaceShipSet.add(ship4);
+                        ship1.shoot((float)xp-xDelta,(float)yp-yDelta, spaceShipSet);
 
                         SpaceShip closest = getClosestShip(xp - xDelta,yp - yDelta);
 
