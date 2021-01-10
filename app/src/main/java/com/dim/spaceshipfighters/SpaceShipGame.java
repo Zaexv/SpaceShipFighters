@@ -78,7 +78,7 @@ public class SpaceShipGame extends AppCompatActivity {
                         yDelta = y - lParams.topMargin;
 
                         ship1.shoot((float)xp-xDelta,(float)yp-yDelta);
-                        SpaceShip closest = getClosestShip(xp - xDelta,yp -yDelta);
+                        SpaceShip closest = getClosestShip(xp - xDelta,yp - yDelta);
 
                         //TODO Crear vector de disparo y pintarlo
 
@@ -157,6 +157,7 @@ public class SpaceShipGame extends AppCompatActivity {
         }
 
         mainLayout = (RelativeLayout) findViewById(R.id.main);
+
         //TODO Mover a los correspondientes cases para evitar bugs.
         spaceship1.setOnTouchListener(onTouchListener());
         spaceship2.setOnTouchListener(onTouchListener());

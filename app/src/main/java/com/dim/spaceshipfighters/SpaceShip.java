@@ -68,7 +68,8 @@ public class SpaceShip {
     }
 
     public void shoot(float x2, float y2) {
-                if(getX() >= x2){ //X is at Left from Ship
+                //TODO
+        /*if(getX() >= x2){ //X is at Left from Ship
                         bulletView.setX(imageView.getX() + 250);
                         bulletView.setY((float)setShootLine2(
                                 50,getX(),getY(),x2,y2));
@@ -77,6 +78,11 @@ public class SpaceShip {
                     bulletView.setY((float)setShootLine(
                             -50, getX(), getY() ,x2,y2));
                 }
+
+         */
+
+        Shoot s = new Shoot(getX(),getY(),x2,y2,bulletView);
+        Thread t = new Thread(s);
+        t.start();
         }
 }
-
