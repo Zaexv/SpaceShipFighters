@@ -86,9 +86,15 @@ public class SpaceShipGame extends AppCompatActivity {
                         spaceShipSet.add(ship2);
                         spaceShipSet.add(ship3);
                         spaceShipSet.add(ship4);
-                        ship1.shoot((float)xp-xDelta,(float)yp-yDelta, spaceShipSet);
 
+                        //Get Closest ship to secondary finger and calculate shoot.
                         SpaceShip closest = getClosestShip(xp - xDelta,yp - yDelta);
+                        laParams = (RelativeLayout.LayoutParams)
+                                closest.getImageView().getLayoutParams();
+                        float  xDeltab = x - laParams.leftMargin;
+                        float  yDeltab = y - laParams.topMargin;
+
+                        closest.shoot((float)xp-xDelta,(float)yp-yDelta, spaceShipSet);
 
                         debug.setText(
                                         "SHIP1: " + ship1.getX()  + ship1.getY() + "\n"
@@ -139,15 +145,21 @@ public class SpaceShipGame extends AppCompatActivity {
 
         bullet1 = (ImageView)findViewById(R.id.bulletP1);
         bullet1.setVisibility(View.INVISIBLE);
+        bullet2 = (ImageView)findViewById(R.id.bulletP2);
+        bullet2.setVisibility(View.INVISIBLE);
+        bullet3 = (ImageView)findViewById(R.id.bulletP3);
+        bullet3.setVisibility(View.INVISIBLE);
+        bullet4 = (ImageView)findViewById(R.id.bulletP4);
+        bullet4.setVisibility(View.INVISIBLE);
 
         //Defining SpaceShip Object
         ship1 = new SpaceShip(spaceship1, bullet1);
         ship1.setName("F21");
-        ship2 = new SpaceShip(spaceship2);
+        ship2 = new SpaceShip(spaceship2, bullet2);
         ship2.setName("Z8");
-        ship3 = new SpaceShip(spaceship3);
+        ship3 = new SpaceShip(spaceship3, bullet3);
         ship3.setName("A7");
-        ship4 = new SpaceShip(spaceship4);
+        ship4 = new SpaceShip(spaceship4, bullet4);
         ship4.setName("032");
 
         switch(numPlayers){
@@ -156,12 +168,32 @@ public class SpaceShipGame extends AppCompatActivity {
                 spaceship2.setVisibility(View.INVISIBLE);
                 spaceship4.setEnabled(false);
                 spaceship4.setVisibility(View.INVISIBLE);
+                spaceship1.setOnTouchListener(onTouchListener());
+                spaceship3.setOnTouchListener(onTouchListener());
+                ship1.setActive(true);
+                ship3.setActive(true);
+
                 break;
             case 3:
                 spaceship2.setEnabled(false);
                 spaceship2.setVisibility(View.INVISIBLE);
+                spaceship1.setOnTouchListener(onTouchListener());
+                spaceship3.setOnTouchListener(onTouchListener());
+                spaceship4.setOnTouchListener(onTouchListener());
+                ship1.setActive(true);
+                ship3.setActive(true);
+                ship4.setActive(true);
+                ship3.setActive(true);
                 break;
             case 4:
+                spaceship1.setOnTouchListener(onTouchListener());
+                spaceship2.setOnTouchListener(onTouchListener());
+                spaceship3.setOnTouchListener(onTouchListener());
+                spaceship4.setOnTouchListener(onTouchListener());
+                ship1.setActive(true);
+                ship2.setActive(true);
+                ship3.setActive(true);
+                ship4.setActive(true);
                 break;
         }
 
@@ -203,11 +235,11 @@ public class SpaceShipGame extends AppCompatActivity {
         min = Math.min(min,dp3);
         min = Math.min(min, dp4);
 
-        if(min == dp1) result = ship1;
-        if(min == dp2) result = ship2;
-        if(min == dp3) result = ship3;
-        if(min == dp4) result = ship4;
-
+        if(min == dp1 && ship1.isActive()) result = ship1;
+        if(min == dp2 && ship2.isActive()) result = ship2;
+        if(min == dp3 && ship3.isActive()) result = ship3;
+        if(min == dp4 && ship4.isActive()) result = ship4;
+        if(result == null) return ship1;
         return result;
     }
 

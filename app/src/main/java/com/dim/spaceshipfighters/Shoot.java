@@ -40,7 +40,8 @@ public class Shoot implements Runnable {
             if(System.currentTimeMillis() > shootTime){
                 for(SpaceShip s : spaceShipSet){
                     System.out.println("Nave Coord" + s.getX() + s.getY());
-                   if(s.isPointInShip(bulletView.getX(), bulletView.getY())) {
+                   if(s.isActive() &&
+                           s.isPointInShip(bulletView.getX(), bulletView.getY())) {
                        s.decreaseLife();
                        reached = true;
                        System.out.println("Le has dado a la nave " + s.getName());

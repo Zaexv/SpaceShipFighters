@@ -22,6 +22,7 @@ public class SpaceShip {
 
     private static int MAX_LIFES = 3;
 
+    private boolean isActive;
     private int lifes;
     private Shoot shoot;
     private int pointerused;
@@ -30,6 +31,7 @@ public class SpaceShip {
     private String name;
 
     public SpaceShip(ImageView view){
+        this.isActive = false;
         name = "default";
         imageView = view;
         lifes = MAX_LIFES;
@@ -39,6 +41,7 @@ public class SpaceShip {
     }
 
     public SpaceShip(ImageView view , ImageView bulletView){
+        this.isActive = false;
         name = "default";
         imageView = view;
         lifes = MAX_LIFES;
@@ -55,6 +58,14 @@ public class SpaceShip {
        return this.pointerused;
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
     public void setName(String name){
         this.name = name;
     }
@@ -66,6 +77,8 @@ public class SpaceShip {
     public int getViewID(){
         return imageView.getId();
     }
+
+    public ImageView getImageView() { return imageView; }
 
     public double getX(){
         return this.imageView.getX();
@@ -126,13 +139,13 @@ public class SpaceShip {
     }
 
     public void decreaseLife(){
+        //TODO insertar animación de recepción de daño
         if(this.lifes > 1){
         this.lifes--;
         } else {
+        this.isActive = false;     
         this.lifes = 0;
         this.imageView.setVisibility(View.INVISIBLE);
         }
     }
-
-
 }
