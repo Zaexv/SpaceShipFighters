@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.view.View.OnTouchListener;
@@ -25,8 +26,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpaceShipGame extends AppCompatActivity implements GestureDetector.OnGestureListener,
-        GestureDetector.OnDoubleTapListener{
+public class SpaceShipGame extends AppCompatActivity //implements GestureDetector.OnGestureListener,
+      // GestureDetector.OnDoubleTapListener{
+{
 
     private int numPlayers; //Stores num of players in-game
     private GestureDetector gDetector;
@@ -34,11 +36,12 @@ public class SpaceShipGame extends AppCompatActivity implements GestureDetector.
     SpaceShip ship1, ship2, ship3,ship4;
     private ViewGroup mainLayout;
     TextView debug,debug2;
-
+    Button button;
 
     private int xDelta;
     private int yDelta;
 
+/*
     public SpaceShipGame(Context context, AttributeSet attrs) {
 
         // Initialize
@@ -47,72 +50,13 @@ public class SpaceShipGame extends AppCompatActivity implements GestureDetector.
 
     }
 
-    @Override
-    public boolean onDoubleTapEvent(MotionEvent e) {
-
-            debug.setText("Estoy haciendo algo");
-
-
-            shield1.setVisibility(View.VISIBLE);
-
-
-
-        return true;
-    }
-
-
-    @Override
-    public boolean onSingleTapConfirmed(MotionEvent e) {
-        return true;
-    }
-    @Override
-    public boolean onDoubleTap(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public boolean onDown(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent e) {
-
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-
-        return false;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent e) {
-
-    }
-
-    @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        return false;
-    }
-
-    //declare touch events for each line and each pointer
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-
-        this.gDetector.onTouchEvent(event);
-    return true;
-    }
-
+*/
     //Define Listener for Images.
     private OnTouchListener onTouchListener() {
 
         return new OnTouchListener() {
+
+
 
             @SuppressLint("ClickableViewAccessibility")
             @Override
@@ -125,6 +69,8 @@ public class SpaceShipGame extends AppCompatActivity implements GestureDetector.
                 RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams)
                         view.getLayoutParams();
                 SpaceShip ship = getShipFromView(view);
+
+                ;
 
                //This is to debug every action.
               /*  debug.setText(
@@ -193,11 +139,74 @@ public class SpaceShipGame extends AppCompatActivity implements GestureDetector.
                 mainLayout.invalidate();
                 return true;
             }
+
+
         };
+
+    }
+
+/*
+    @Override
+    public boolean onDoubleTapEvent(MotionEvent e) {
+
+        debug.setText("Estoy haciendo algo");
+        shield1.setVisibility(View.VISIBLE);
+
+
+        return true;
     }
 
 
+    @Override
+    public boolean onSingleTapConfirmed(MotionEvent e) {
+        return true;
+    }
+    @Override
+    public boolean onDoubleTap(MotionEvent e) {
+        return false;
+    }
 
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        return false;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        this.gDetector.onTouchEvent(event);
+        return true;
+    }
+
+    //declare touch events for each line and each pointer
+
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -241,13 +250,41 @@ public class SpaceShipGame extends AppCompatActivity implements GestureDetector.
 
         mainLayout = (RelativeLayout) findViewById(R.id.main);
 
+
+
         //TODO Mover a los correspondientes cases para evitar bugs.
         spaceship1.setOnTouchListener(onTouchListener());
         spaceship2.setOnTouchListener(onTouchListener());
         spaceship3.setOnTouchListener(onTouchListener());
         spaceship4.setOnTouchListener(onTouchListener());
 
-        shield1 = (ImageView) findViewById(R.id.ship_shield1);
+        // Otro intento de double tap
+
+        button = findViewById(R.id.button_Shield1);
+        shield1 = findViewById(R.id.ship_shield1);
+
+        button.setOnTouchListener(new View.OnTouchListener() {
+            GestureDetector gestureDetector = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener(){
+
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+
+                    shield1.setVisibility(View.VISIBLE);
+                    return super.onDoubleTap(e);
+                }
+            });
+
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                gestureDetector.onTouchEvent(motionEvent);
+                return false;
+            }
+        });
+
+
+
+
     }
 
     public SpaceShip getShipFromView(View v){
