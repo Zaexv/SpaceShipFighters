@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.view.View.OnTouchListener;
@@ -42,8 +43,7 @@ public class SpaceShipGame extends AppCompatActivity {
                 int index = event.getActionIndex();
                 int pointer = event.getPointerId(index);
 
-                RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams)
-                        view.getLayoutParams();
+
                 SpaceShip ship = getShipFromView(view);
 
                 debug.setText(
@@ -62,6 +62,8 @@ public class SpaceShipGame extends AppCompatActivity {
 
                 switch (event.getActionMasked() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
+                        RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams)
+                                view.getLayoutParams();
                         xDelta = x - lParams.leftMargin;
                         yDelta = y - lParams.topMargin;
                         break;
@@ -69,18 +71,17 @@ public class SpaceShipGame extends AppCompatActivity {
                         //This piece of code take the relative position in the layout
                         int location[] = {0,0};
                         view.getLocationOnScreen(location);
-
+                        RelativeLayout.LayoutParams laParams = (RelativeLayout.LayoutParams)
+                                view.getLayoutParams();
                         int xp = (int) event.getX(index) + location[0];
                         int yp = (int) event.getY(index) + location[1];
 
-                        xDelta = x - lParams.leftMargin;
-                        yDelta = y - lParams.topMargin;
+                        xDelta = x - laParams.leftMargin;
+                        yDelta = y - laParams.topMargin;
 
                         ship1.shoot((float)xp-xDelta,(float)yp-yDelta);
+
                         SpaceShip closest = getClosestShip(xp - xDelta,yp - yDelta);
-
-                        //TODO Crear vector de disparo y pintarlo
-
 
                         debug.setText(
                                         "SHIP1: " + ship1.getX()  + ship1.getY() + "\n"
@@ -101,13 +102,14 @@ public class SpaceShipGame extends AppCompatActivity {
                         break;
 
                     case MotionEvent.ACTION_MOVE:
-                        lParams.leftMargin = x - xDelta;
-                        lParams.topMargin = y - yDelta;
-                        lParams.rightMargin = 0;
-                        lParams.bottomMargin = 0;
-                        view.setLayoutParams(lParams);
+                        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view
+                                .getLayoutParams();
+                        layoutParams.leftMargin = x - xDelta;
+                        layoutParams.topMargin = y - yDelta;
+                        layoutParams.rightMargin = 0;
+                        layoutParams.bottomMargin = 0;
+                        view.setLayoutParams(layoutParams);
                         break;
-
                 }
                 mainLayout.invalidate();
                 return true;
@@ -140,7 +142,6 @@ public class SpaceShipGame extends AppCompatActivity {
         ship3.setName("A7");
         ship4 = new SpaceShip(spaceship4);
         ship4.setName("032");
-
 
         switch(numPlayers){
             case 2:

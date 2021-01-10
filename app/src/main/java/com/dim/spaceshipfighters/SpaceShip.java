@@ -1,7 +1,14 @@
 package com.dim.spaceshipfighters;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.graphics.Path;
 import android.view.View;
+import android.view.animation.PathInterpolator;
 import android.widget.ImageView;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.atan2;
@@ -14,6 +21,7 @@ public class SpaceShip {
     private static int MAX_LIFES;
 
     private int lifes;
+    private Shoot shoot;
     private int pointerused;
     private boolean shield, shooting;
     private ImageView imageView, bulletView;
@@ -73,9 +81,14 @@ public class SpaceShip {
         this.shooting = shooting;
     }
 
-    public void shoot(float x2, float y2) {
+    public Shoot getShoot() {
+        return shoot;
+    }
 
+
+    public void shoot(float x2, float y2) {
         if(!shooting) {
+            bulletView.setVisibility(View.VISIBLE);
             setShooting(true);
             float centreX = imageView.getX() - imageView.getWidth() / 2;
             float centreY = imageView.getY() + imageView.getHeight() / 2;
@@ -84,18 +97,25 @@ public class SpaceShip {
             float angle = (float) atan2(deltaY, deltaX);
             float speed = 10;
             float degrees = (float) ((angle > 0 ? angle : (2 * PI + angle)) * 360 / (2 * PI));
-            float posX = (float) (centreX - speed * 20 * cos(angle));
-            float posY = (float) (centreY - speed * 20 * sin(angle));
+            float posX = (float) (centreX - speed * 1000 * cos(angle));
+            float posY = (float) (centreY - speed * 1000 * sin(angle));
             //System.out.println(angle);
             bulletView.setX(posX);
             bulletView.setY(posY);
 
-            bulletView.setVisibility(View.VISIBLE);
-            Shoot s = new Shoot(posX, posY, bulletView, angle, this);
-
-
-            Thread t = new Thread(s);
-            t.start();
+            //Shoot aniation;
+            ObjectAnimator animation1;
+            ObjectAnimator animation2;
+            animation1 = ObjectAnimator.ofFloat(bulletView, "x", centreX, posX);
+            animation2 = ObjectAnimator.ofFloat(bulletView, "y", centreY, posY);
+            AnimatorSet set = new AnimatorSet();
+            set.setDuration(1000);
+            set.playTogether(animation1, animation2);
+            set.start();
+            shoot = new Shoot(bulletView, this, set);
+            shoot.start();
         }
     }
+
+
 }
