@@ -31,7 +31,7 @@ public class SpaceShipGame extends AppCompatActivity //implements GestureDetecto
 {
 
     private int numPlayers; //Stores num of players in-game
-    ImageView spaceship1, spaceship2, spaceship3, spaceship4, bullet1,bullet2,bullet3,bullet4,shield1;
+    ImageView spaceship1, spaceship2, spaceship3, spaceship4, bullet1,bullet2,bullet3,bullet4,shield1, doubleTapView;
     SpaceShip ship1, ship2, ship3,ship4;
     private ViewGroup mainLayout;
     TextView debug,debug2;
@@ -56,6 +56,7 @@ public class SpaceShipGame extends AppCompatActivity //implements GestureDetecto
                 final int y = (int) event.getRawY();
                 int index = event.getActionIndex();
                 int pointer = event.getPointerId(index);
+
                 gestureDetector.onTouchEvent(event);
                 RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams)
                         view.getLayoutParams();
@@ -67,6 +68,7 @@ public class SpaceShipGame extends AppCompatActivity //implements GestureDetecto
                     case MotionEvent.ACTION_DOWN:
                         xDelta = x - lParams.leftMargin;
                         yDelta = y - lParams.topMargin;
+
                         break;
                     case MotionEvent.ACTION_POINTER_DOWN:
                         //This piece of code take the relative position in the layout
@@ -237,8 +239,8 @@ public class SpaceShipGame extends AppCompatActivity //implements GestureDetecto
         @Override
         public boolean onDoubleTap(MotionEvent e) {
 
-
-        debug.setText("Se detecto el double tap");
+           // SpaceShip s = getClosestShip((int)e.getX() - xDelta , (int)e.getY() - yDelta);
+        debug.setText("Se detecto un doble tap en ");
 
 
             return true;
