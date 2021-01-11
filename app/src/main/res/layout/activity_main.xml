@@ -56,6 +56,7 @@
             android:background="@color/black"
             android:text="To play Space Ship Fighters 2052 touch your ship and touch around to shoot. \n To activate shield you must be the only one double tapping your ship.\n      Good luck and have fun! :D"
             android:textAlignment="gravity"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/white" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
